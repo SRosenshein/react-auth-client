@@ -22,6 +22,20 @@ export function signinUser({ email, password }) {
 	};
 };
 
+export function signupUser({ email, password }) {
+	return function(dispatch) {
+		axios.post(`${ROOT_URL}/signup`, { email, password })
+			.then(res => {
+				dispatch({ type: AUTH_USER });
+				localStorage.setItem('token', res.data.token);
+				browserHistory.push('/feature');
+			})
+			.catch(res => {
+				dispatch(authError(res.response.data.error));
+			});
+	};
+};
+
 export function authError(error) {
 	return {
 		type: AUTH_ERROR,
